@@ -91,9 +91,33 @@ namespace ictestproject
             driver.FindElement(By.Id("SaveButton")).Click();
             Thread.Sleep(3000);
 
+            //clicking on administration
+            driver.FindElement(By.ClassName("dropdown-toggle")).Click();
+            Thread.Sleep(3000);
 
+            //clicking on customers
+            driver.FindElement(By.XPath("//*[text()='Customers']")).Click();
+            Thread.Sleep(2000);
 
+            //clicking on creat new
+            driver.FindElement(By.XPath("//*[@id='container']/p/a")).Click();
+            Thread.Sleep(2000);
 
+            //input value into name
+            driver.FindElement(By.Id("Name")).SendKeys("Sharanya");
+            Thread.Sleep(2000);
+
+            //checking select box
+            driver.FindElement(By.Id("IsSameContact")).Click();
+            Thread.Sleep(2000);
+
+            //input value into GST
+            driver.FindElement(By.Id("GST")).SendKeys("30$");
+            Thread.Sleep(2000);
+
+            //clicking submit button
+            driver.FindElement(By.XPath("//*[@type='submit']")).Click();
+            Thread.Sleep(2000);
 
         }
 
