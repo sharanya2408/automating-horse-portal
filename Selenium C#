@@ -1,0 +1,112 @@
+using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using System.Diagnostics;
+using System.Threading;
+
+namespace ictestproject
+{
+    public class Tests
+    {
+        IWebDriver driver;
+
+        [SetUp]
+        public void Setup()
+        {
+            // initialize chrome driver 
+
+            // Allocate some memory to the chrome 
+
+            // Open a browser : Chrome
+            driver = new ChromeDriver();
+
+            //// Maximize the Chrome browser window
+
+            driver.Manage().Window.Maximize();
+        }
+
+        [Test]
+        public void VerifyUserCanLoginIntoIC()
+        {
+          
+            // Navigate to Horse Portal using it's URL
+
+            driver.Navigate().GoToUrl("http://horse.industryconnect.io/Account/Login?ReturnUrl=%2f");
+            //user name
+           driver.FindElement(By.Id("UserName")).SendKeys("hari");
+
+            //password
+           driver.FindElement(By.Id("Password")).SendKeys("123123");
+
+            //clicking on login
+           driver.FindElement(By.CssSelector("input[type='submit']")).Click();
+           
+
+           //var dropdowns = driver.FindElements(By.CssSelector("li[class='dropdown']a[role='button']"));
+
+           var isHariPresent = driver.FindElement(By.XPath("//*[text()='Hello hari!']"));
+            //clicking on administration
+           var administrations = driver.FindElements(By.ClassName("dropdown-toggle"));
+            bool administration = false;
+            foreach (var dropdown in administrations)
+            {
+                if (dropdown.Text == "Administration")
+                {
+                    dropdown.Click();
+                    Thread.Sleep(2000);
+                    break;
+
+                }
+            }
+            //clicking on time and material
+           driver.FindElement(By.XPath("//*[text()='Time & Materials']")).Click();
+           Thread.Sleep(2000);
+
+
+            //creating new record
+           driver.FindElement(By.XPath("//*[@id='container']/p/a")).Click();
+           Thread.Sleep(2000);
+
+            //clicking on material
+            driver.FindElement(By.XPath("//span[text()='Material']")).Click();
+            Thread.Sleep(2000);
+
+            //selecting time
+            driver.FindElement(By.XPath("//*[@id='TypeCode_listbox']/li[2]")).Click();
+            Thread.Sleep(3000);
+
+            //input value into code
+            driver.FindElement(By.Id("Code")).SendKeys("2345");
+            Thread.Sleep(3000);
+
+            //input value into description
+            driver.FindElement(By.Id("Description")).SendKeys("this is my time value");
+            Thread.Sleep(3000);
+
+            //input value into price per unit
+            driver.FindElement(By.CssSelector("input[class='k-formatted-value k-input']")).SendKeys("20$");
+            Thread.Sleep(3000);
+
+            //clicking on save
+            driver.FindElement(By.Id("SaveButton")).Click();
+            Thread.Sleep(3000);
+
+
+
+
+
+        }
+
+        [TearDown]
+        public void CloseDriver()
+        {
+            //// Close the chrome driver
+            driver.Close();
+
+            //// Frees up the memory taken by chrome. 
+            driver.Dispose();
+        }
+    }
+}
+
+
