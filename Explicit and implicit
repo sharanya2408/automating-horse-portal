@@ -1,0 +1,145 @@
+
+using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using System;
+using System.Diagnostics;
+using System.Threading;
+
+namespace ictestproject
+{
+    public class Tests
+    {
+        IWebDriver driver;
+
+        public object ExpectedConditions { get; private set; }
+
+        [SetUp]
+        public void Setup()
+        {
+            // initialize chrome driver 
+
+            // Open a browser : Chrome
+            driver = new ChromeDriver();
+
+            //// Maximize the Chrome browser window
+
+            driver.Manage().Window.Maximize();
+            //implicit wait
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+        }
+
+        [Test]
+        public void VerifyUserCanLoginIntoIC()
+        {
+
+            driver.Navigate().GoToUrl("http://horse.industryconnect.io/Account/Login?ReturnUrl=%2f");
+            //user name
+            driver.FindElement(By.Id("UserName")).SendKeys("hari");
+
+            //password
+            driver.FindElement(By.Id("Password")).SendKeys("123123");
+
+            //clicking on login
+            driver.FindElement(By.CssSelector("input[type='submit']")).Click();
+
+            var isHariPresent = driver.FindElement(By.XPath("//*[text()='Hello hari!']"));
+
+            //clicking on administration
+            var administrations = driver.FindElements(By.ClassName("dropdown-toggle"));
+            bool administration = false;
+            foreach (var dropdown in administrations)
+            {
+                if (dropdown.Text == "Administration")
+                {
+                    dropdown.Click();
+
+                    break;
+
+                }
+            }
+            //clicking on time and material
+            driver.FindElement(By.XPath("//*[text()='Time & Materials']")).Click();
+
+            //creating new record
+            driver.FindElement(By.XPath("//*[@id='container']/p/a")).Click();
+
+
+            //clicking on material
+            driver.FindElement(By.XPath("//span[text()='Material']")).Click();
+
+
+            //selecting time
+            driver.FindElement(By.XPath("//*[@id='TypeCode_listbox']/li[2]")).Click();
+
+
+            //input value into code
+            driver.FindElement(By.Id("Code")).SendKeys("2345");
+
+
+            //input value into description
+            driver.FindElement(By.Id("Description")).SendKeys("this is my time value");
+
+
+            //input value into price per unit
+            driver.FindElement(By.CssSelector("input[class='k-formatted-value k-input']")).SendKeys("20$");
+
+
+            //clicking on save
+            driver.FindElement(By.Id("SaveButton")).Click();
+
+            //verifying the created instance
+            driver.FindElement(By.CssSelector("span[class='k-icon k-i-seek-e']")).Click();
+            Thread.Sleep(3000);
+
+
+
+           //clicking on administration
+           driver.FindElement(By.ClassName("dropdown-toggle")).Click();
+            //explicit wait
+            var wait = new WebDriverWait(driver, TimeSpan.FromMinutes(1));
+            wait.IgnoreExceptionTypes(typeof(NoSuchElementException));
+
+            //wait.Until(ExpectedConditions.ElementIsClickable(By.XPath("//*[text()='Customers']"));
+
+
+            //clicking on customers
+            driver.FindElement(By.XPath("//*[text()='Customers']")).Click();
+           
+
+            //clicking on creat new
+            driver.FindElement(By.XPath("//*[@id='container']/p/a")).Click();
+            
+
+           //input value into name
+           driver.FindElement(By.Id("Name")).SendKeys("Sharanya");
+           
+
+           //checking select box
+           driver.FindElement(By.Id("IsSameContact")).Click();
+          
+
+           //input value into GST
+           driver.FindElement(By.Id("GST")).SendKeys("30$");
+            
+
+           //clicking submit button
+            driver.FindElement(By.XPath("//*[@type='submit']")).Click();
+            
+
+        }
+
+        [TearDown]
+        public void CloseDriver()
+        {
+            //// Close the chrome driver
+            driver.Close();
+
+            //// Frees up the memory taken by chrome. 
+            driver.Dispose();
+        }
+    }
+}
+
+
