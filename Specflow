@@ -1,10 +1,7 @@
-using ictestproject.NewFolder;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using SpecflowICHorse.PageObject;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using TechTalk.SpecFlow;
 
 namespace ictestproject.Stepdefinition
@@ -12,16 +9,23 @@ namespace ictestproject.Stepdefinition
     [Binding]
     public class StepDefinitionhorseportal
     {
+        IWebDriver driver;
+
+
+        [BeforeScenario]
+        void Setup()
+        {
+            var options = new ChromeOptions();
+            options.AddArgument("---headless");
+            driver = new ChromeDriver(options);
+
+            driver.Manage().Window.Maximize();
+        }
+
         [Given(@"I navigate to the portal")]
         public void GivenINavigateToThePortal()
         {
-            IWebDriver driver;
-
-            // initialize chrome driver 
-            // Open a browser : Chrome
-            driver = new ChromeDriver();
-            //// Maximize the Chrome browser window
-            driver.Manage().Window.Maximize();
+           
             //implicit wait
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
 
@@ -30,19 +34,30 @@ namespace ictestproject.Stepdefinition
         [When(@"I add credentials to the login page")]
         public void WhenIAddCredentialsToTheLoginPage()
         {
-            IWebDriver driver;
-            var login = new Loginpage(driver);
+           var login = new Loginpage(driver);
             login.login1();
         }
 
-        [Then(@"I verfy that the user is able to login into the portal")]
-        public void ThenIVerfyThatTheUserIsAbleToLoginIntoThePortal()
+        [Then(@"I verify that the user is able to login into the portal")]
+        public void ThenIVerifyThatTheUserIsAbleToLoginIntoThePortal()
         {
+            var Dashboard = new Dashboard(driver);
+            Dashboard.Dashboard1();
 
         }
 
+        [When(@"I add Time and material records\.")]
+        public void WhenIAddTimeAndMaterialRecords_()
+        {
+            var TimeMaterial = new TimeMaterial(driver);
+            TimeMaterial.TimeMaterial1();
+        }
+
+        [Then(@"i verify the records entered\.")]
+        public void ThenIVerifyTheRecordsEntered_()
+        {
+           
+        }
+
     }
-
-
 }
-
